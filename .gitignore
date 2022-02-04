@@ -19,3 +19,6 @@ go.work
 
 # Config file
 config.yaml
+
+# Generated binary
+go-hue-bridge
