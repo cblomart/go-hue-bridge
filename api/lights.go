@@ -22,14 +22,6 @@ type HueState struct {
 }
 
 type PointSymbol struct {
-	One   string `json:"1"`
-	Two   string `json:"2"`
-	Three string `json:"3"`
-	Four  string `json:"4"`
-	Five  string `json:"5"`
-	Six   string `json:"6"`
-	Seven string `json:"7"`
-	Eight string `json:"8"`
 }
 
 type HueLight struct {
