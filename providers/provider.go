@@ -13,6 +13,7 @@ var Providers map[string]Provider = make(map[string]Provider)
 
 type Provider interface {
 	GetLights() error
+	GetLight(id string) error
 	On(id string) error
 	Off(id string) error
 }
@@ -44,7 +45,7 @@ func GetLights() {
 func GetProviderLights(id int) error {
 	light := items.Lights[id]
 	provider := Providers[light.Provider]
-	return provider.GetLights()
+	return provider.GetLight(light.XID)
 }
 
 func On(id int) error {

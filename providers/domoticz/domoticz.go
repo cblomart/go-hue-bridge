@@ -15,6 +15,7 @@ import (
 const (
 	listlightsPath = "/json.htm?type=devices&filter=light&used=true&order=[Order]"
 	setlightPath   = "/json.htm?type=command&param=switchlight&idx={id}&switchcmd={cmd}"
+	getlightPath   = "/json.htm?type=devices&rid={id}"
 )
 
 type DomoticzLight struct {
@@ -132,12 +133,53 @@ func (d Domoticz) GetLights() error {
 	json.Unmarshal(bodyBytes, &domoticzLights)
 	// convert domoticz lights to hue lights
 	for i, l := range domoticzLights.Result {
-		if _, ok := items.Lights[i]; ok {
+		if _, ok := items.Lights[i+d.StartIndex]; ok {
 			items.Lights[i+d.StartIndex].On = strings.EqualFold(l.Status, "On")
 		} else {
 			items.Lights[i+d.StartIndex] = &items.Light{Provider: d.Name, Name: l.Name, XID: l.IDX, On: strings.EqualFold(l.Status, "On")}
 		}
 	}
 	log.Printf("domoticz - %s - returned %d lights", d.Name, len(domoticzLights.Result))
+	return nil
+}
+
+func (d Domoticz) GetLight(id string) error {
+	// prepare path
+	path := strings.Replace(getlightPath, "{id}", id, -1)
+	// set lights from domoticz
+	req, err := http.NewRequest("GET", d.getURL(path), nil)
+	if err != nil {
+		log.Printf("domoticz - %s - couldn't generate get request for %s: %s", d.Name, id, err)
+		return fmt.Errorf("couldn't generate get request for %s", id)
+	}
+	resp, err := d.client.Do(req)
+	if err != nil {
+		log.Printf("domoticz - %s - couldn't get light %s: %s", d.Name, id, err)
+		return fmt.Errorf("couldn't get light %s", id)
+	}
+	// read response
+	defer resp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	// convert to object
+	var domoticzLights DomoticzLights
+	json.Unmarshal(bodyBytes, &domoticzLights)
+	if len(domoticzLights.Result) != 1 {
+		log.Printf("domoticz - %s - light not found %s", d.Name, id)
+		return nil
+	}
+	// find the light to update
+	var lightItem *items.Light
+	for _, l := range items.Lights {
+		if l.XID == id {
+			lightItem = l
+			break
+		}
+	}
+	if lightItem == nil {
+		log.Printf("domoticz - %s - light not found %s", d.Name, id)
+		return nil
+	}
+	lightItem.On = strings.EqualFold(domoticzLights.Result[0].Status, "On")
+	log.Printf("domoticz - %s - updated light %s state", d.Name, id)
 	return nil
 }
