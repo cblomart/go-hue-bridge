@@ -25,11 +25,8 @@ func LightInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("http - light - cannot refresh provider for %d: %s", id, err)
 	}
-	// Get the light
-	lightState := items.Lights[int(id)]
-	light := GetLight(lightState.Provider, lightState.Name, lightState.On)
 	// prep the response
-	resp, err := json.Marshal(light)
+	resp, err := json.Marshal(ToHueLight(items.Lights[int(id)]))
 	if err != nil {
 		log.Printf("http - lights - cannot convert to json: %s", err)
 		w.WriteHeader(500)

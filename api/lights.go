@@ -53,16 +53,24 @@ func GetLight(provider, name string, on bool) HueLight {
 	return light
 }
 
+func ToHueLight(l *items.Light) *HueLight {
+	result := GetLight(l.Provider, l.Name, l.On)
+	return &result
+}
+
+func ToHueLights(ls map[int]*items.Light) map[string]*HueLight {
+	result := make(map[string]*HueLight)
+	for i, l := range ls {
+		result[strconv.Itoa(i)] = ToHueLight(l)
+	}
+	return result
+}
+
 func Lights(w http.ResponseWriter, r *http.Request) {
 	// refresh providers
 	providers.GetLights()
-	// build the list of lights
-	lights := make(map[string]HueLight)
-	for i, l := range items.Lights {
-		lights[strconv.Itoa(i)] = GetLight(l.Provider, l.Name, l.On)
-	}
 	// prep the response
-	resp, err := json.Marshal(lights)
+	resp, err := json.Marshal(ToHueLights(items.Lights))
 	if err != nil {
 		log.Printf("http - lights - cannot convert to json: %s", err)
 		w.WriteHeader(500)
