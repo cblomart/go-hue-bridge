@@ -99,10 +99,7 @@ Response:
         "uniqueid":"00:7d:e8:a0:eb:37:00:f8-a4",
         "state": {
             "on":false,
-            "effect":"none",
-            "reachable":true,
-            "alert":"none",
-            "mode":"homeautomation"
+            "reachable":true
         },
         "pointsymbol":{}
     },
@@ -115,10 +112,7 @@ Response:
         "uniqueid":"00:b5:64:46:fb:57:38:28-80",
         "state": {
             "on":false,
-            "effect":"none",
-            "reachable":true,
-            "alert":"none",
-            "mode":"homeautomation"
+            "reachable":true
         },
         "pointsymbol":{}
     }
@@ -142,11 +136,7 @@ Response:
         "uniqueid":"00:7d:e8:a0:eb:37:00:f8-a4",
         "state": {
             "on":false,
-            "effect":"none",
-            "xy":null,
-            "reachable":true,
-            "alert":"none",
-            "mode":"homeautomation"
+            "reachable":true
         },
         "pointsymbol":{}
     }

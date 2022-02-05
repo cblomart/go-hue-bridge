@@ -13,11 +13,8 @@ import (
 )
 
 type HueState struct {
-	On        bool   `json:"on"`
-	Effect    string `json:"effect"`
-	Reachable bool   `json:"reachable"`
-	Alert     string `json:"alert"`
-	Mode      string `json:"mode"`
+	On        bool `json:"on"`
+	Reachable bool `json:"reachable"`
 }
 
 type PointSymbol struct {
@@ -51,9 +48,6 @@ func GetLight(provider, name string, on bool) HueLight {
 		State: HueState{
 			On:        on,
 			Reachable: true,
-			Alert:     "none",
-			Mode:      "homeautomation",
-			Effect:    "none",
 		},
 	}
 	// TODO: get real status from config
