@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	file = flag.String("file", "config.yaml", "Hue Bridge configuration")
+	file = flag.String("file", "/etc/go-hue-bridge.yaml", "Hue Bridge configuration")
 )
 
 func main() {
