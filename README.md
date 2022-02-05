@@ -81,6 +81,7 @@ I found that some emulation softawre added the ``pointsymbol`` attribute. By add
 Luckily i created a way to generate unique ids as described on ``Philips`` website as it turns out reverting to simple ids break the discovery too.
 
 > *TODO*: check if xy is realy needed 
+
 > *TODO*: check if exposing a specific device type is alright rather than copying existing ones
 
 Request:
