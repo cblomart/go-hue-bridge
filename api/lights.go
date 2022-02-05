@@ -50,7 +50,6 @@ func GetLight(provider, name string, on bool) HueLight {
 			Reachable: true,
 		},
 	}
-	// TODO: get real status from config
 	return light
 }
 
