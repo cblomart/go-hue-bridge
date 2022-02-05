@@ -13,12 +13,11 @@ import (
 )
 
 type HueState struct {
-	On        bool      `json:"on"`
-	Effect    string    `json:"effect"`
-	XY        []float32 `json:"xy"`
-	Reachable bool      `json:"reachable"`
-	Alert     string    `json:"alert"`
-	Mode      string    `json:"mode"`
+	On        bool   `json:"on"`
+	Effect    string `json:"effect"`
+	Reachable bool   `json:"reachable"`
+	Alert     string `json:"alert"`
+	Mode      string `json:"mode"`
 }
 
 type PointSymbol struct {
