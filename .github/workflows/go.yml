@@ -21,7 +21,7 @@ jobs:
     - name: security
       uses: securego/gosec@master
       with:
-        args: ./...
+        args: --no-fail ./...
 
   build:
     runs-on: ubuntu-latest

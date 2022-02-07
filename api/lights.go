@@ -1,7 +1,7 @@
 package api
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -32,7 +32,7 @@ type HueLight struct {
 }
 
 func uniqueID(provider, name string) string {
-	md := md5.Sum([]byte(fmt.Sprintf("%s/%s", provider, name)))
+	md := sha256.Sum256([]byte(fmt.Sprintf("%s/%s", provider, name)))
 	return fmt.Sprintf("00:%02x:%02x:%02x:%02x:%02x:%02x:%02x-%02x", md[1:2], md[2:3], md[4:5], md[6:7], md[8:9], md[10:11], md[12:13], md[14:15])
 }
 

@@ -39,7 +39,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("config file - %s - couldn't serialize: %s", *file, err)
 		}
-		err = ioutil.WriteFile(*file, data, 0666)
+		err = ioutil.WriteFile(*file, data, 0600)
 		if err != nil {
 			log.Fatalf("config file - %s - couldn't write: %s", *file, err)
 		}
