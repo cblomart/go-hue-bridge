@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/cblomart/go-hue-bridge/providers"
 	"github.com/cblomart/go-hue-bridge/providers/items"
@@ -14,6 +15,8 @@ import (
 
 func LightInfo(w http.ResponseWriter, r *http.Request) {
 	lightId := chi.URLParam(r, "id")
+	lightId = strings.Replace(lightId, "\n", "", -1)
+	lightId = strings.Replace(lightId, "\r", "", -1)
 	id, err := strconv.ParseInt(lightId, 10, 0)
 	if err != nil {
 		log.Printf("http - light - cannot convert index (%s): %s", lightId, err)
@@ -40,6 +43,8 @@ func LightInfo(w http.ResponseWriter, r *http.Request) {
 func LightState(w http.ResponseWriter, r *http.Request) {
 	// get light id
 	lightId := chi.URLParam(r, "id")
+	lightId = strings.Replace(lightId, "\n", "", -1)
+	lightId = strings.Replace(lightId, "\r", "", -1)
 	id, err := strconv.ParseInt(lightId, 10, 0)
 	if err != nil {
 		log.Printf("http - light - cannot convert index (%s): %s", lightId, err)
@@ -50,11 +55,14 @@ func LightState(w http.ResponseWriter, r *http.Request) {
 	req := make(map[string]interface{})
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		log.Printf("http - light - cannot convert request for light (%s): %s", lightId, err)
+		log.Printf("http - light - cannot convert request for light (%d): %s", id, err)
 		w.WriteHeader(500)
 		return
 	}
 	for k := range req {
+		reqState := fmt.Sprintf("%v", req[k])
+		reqState = strings.Replace(reqState, "\n", "", -1)
+		reqState = strings.Replace(reqState, "\r", "", -1)
 		log.Printf("http - light - setting light %d '%s' to %v", id, k, req[k])
 	}
 	// set light state
@@ -65,7 +73,8 @@ func LightState(w http.ResponseWriter, r *http.Request) {
 		err = providers.Off(int(id))
 	}
 	if err != nil {
-		log.Printf("http - light - cannot swith light (%d) '%v': %s", id, req["on"].(bool), err)
+		reqState := req["on"].(bool)
+		log.Printf("http - light - cannot swith light (%d) '%v': %s", id, reqState, err)
 		w.WriteHeader(500)
 		return
 	}
