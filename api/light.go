@@ -37,7 +37,10 @@ func LightInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	// send response
 	w.Header().Add("Content-Type", "application/json")
-	w.Write([]byte(resp))
+	_, err = w.Write([]byte(resp))
+	if err != nil {
+		log.Fatalf("http - couldn't write light info request: %s", err)
+	}
 }
 
 func LightState(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +69,6 @@ func LightState(w http.ResponseWriter, r *http.Request) {
 		log.Printf("http - light - setting light %d '%s' to %v", id, k, reqState)
 	}
 	// set light state
-	err = nil
 	if req["on"].(bool) {
 		err = providers.On(int(id))
 	} else {
@@ -99,5 +101,8 @@ func LightState(w http.ResponseWriter, r *http.Request) {
 	}
 	// send response
 	w.Header().Add("Content-Type", "application/json")
-	w.Write([]byte(resp))
+	_, err = w.Write([]byte(resp))
+	if err != nil {
+		log.Fatalf("http - couldn't write light switch request: %s", err)
+	}
 }
