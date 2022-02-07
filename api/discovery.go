@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -39,5 +40,8 @@ func Discovery(w http.ResponseWriter, r *http.Request) {
 	resp = strings.ReplaceAll(resp, "\n", "")
 	// send response
 	w.Header().Add("Content-Type", "application/xml; charset=utf-8")
-	w.Write([]byte(resp))
+	_, err := w.Write([]byte(resp))
+	if err != nil {
+		log.Fatalf("http - couldn't write discovery request: %s", err)
+	}
 }

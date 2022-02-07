@@ -3,6 +3,7 @@ package api
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -26,5 +27,8 @@ func Api(w http.ResponseWriter, r *http.Request) {
 	resp := strings.ReplaceAll(apiResponse, "<username>", user)
 	// send response
 	w.Header().Add("Content-Type", "application/json")
-	w.Write([]byte(resp))
+	_, err := w.Write([]byte(resp))
+	if err != nil {
+		log.Fatalf("http - couldn't write user request: %s", err)
+	}
 }

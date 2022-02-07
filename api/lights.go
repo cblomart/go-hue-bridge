@@ -78,5 +78,8 @@ func Lights(w http.ResponseWriter, r *http.Request) {
 	}
 	// send response
 	w.Header().Add("Content-Type", "application/json")
-	w.Write([]byte(resp))
+	_, err = w.Write([]byte(resp))
+	if err != nil {
+		log.Fatalf("http - couldn't write light request: %s", err)
+	}
 }

@@ -95,7 +95,11 @@ func (d Domoticz) Set(id, state string) error {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	// convert to object
 	var domoticzStatus DomoticzStatus
-	json.Unmarshal(bodyBytes, &domoticzStatus)
+	err = json.Unmarshal(bodyBytes, &domoticzStatus)
+	if err != nil {
+		log.Printf("domoticz - %s - couldn't set light %s to %s: %s", d.Name, id, state, err)
+		return fmt.Errorf("couldn't set light %s to %s", id, state)
+	}
 	if strings.EqualFold(domoticzStatus.Status, "error") {
 		log.Printf("domoticz - %s - couldn't set light %s to %s: %s", d.Name, id, state, domoticzStatus.Message)
 		return fmt.Errorf("couldn't set light %s to %s", id, state)
@@ -130,7 +134,11 @@ func (d Domoticz) GetLights() error {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	// convert to object
 	var domoticzLights DomoticzLights
-	json.Unmarshal(bodyBytes, &domoticzLights)
+	err = json.Unmarshal(bodyBytes, &domoticzLights)
+	if err != nil {
+		log.Printf("domoticz - %s - couldn't read light list: %s", d.Name, err)
+		return fmt.Errorf("couldn't read light list")
+	}
 	// convert domoticz lights to hue lights
 	for i, l := range domoticzLights.Result {
 		if _, ok := items.Lights[i+d.StartIndex]; ok {
@@ -162,7 +170,11 @@ func (d Domoticz) GetLight(id string) error {
 	bodyBytes, _ := ioutil.ReadAll(resp.Body)
 	// convert to object
 	var domoticzLights DomoticzLights
-	json.Unmarshal(bodyBytes, &domoticzLights)
+	err = json.Unmarshal(bodyBytes, &domoticzLights)
+	if err != nil {
+		log.Printf("domoticz - %s - couldn't read light list: %s", d.Name, err)
+		return fmt.Errorf("couldn't read light list")
+	}
 	if len(domoticzLights.Result) != 1 {
 		log.Printf("domoticz - %s - light not found %s", d.Name, id)
 		return nil

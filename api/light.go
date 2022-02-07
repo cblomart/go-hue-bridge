@@ -79,7 +79,12 @@ func LightState(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// refresh provider
-	providers.GetProviderLights(int(id))
+	err = providers.GetProviderLights(int(id))
+	if err != nil {
+		log.Printf("http - light - cannot get light '%d': %s", id, err)
+		w.WriteHeader(500)
+		return
+	}
 	// prep the response
 	hueresp := make([]map[string]map[string]bool, 0)
 	successResult := make(map[string]map[string]bool)
