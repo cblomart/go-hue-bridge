@@ -15,8 +15,6 @@ jobs:
 
     - name: lint
       uses: golangci/golangci-lint-action@v2
-      with:
-        args: "--out-format colored-line-number"
 
     - name: security
       uses: securego/gosec@master
