@@ -15,11 +15,16 @@ jobs:
 
     - name: lint
       uses: golangci/golangci-lint-action@v2
+          
+    - name: show lint errors
+      run: golangci-lint run
+        if: ${{ failure() }}
 
     - name: security
       uses: securego/gosec@master
       with:
         args: ./...
+          - name: errors
 
   build:
     runs-on: ubuntu-latest
