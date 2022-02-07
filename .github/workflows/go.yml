@@ -15,10 +15,8 @@ jobs:
 
     - name: lint
       uses: golangci/golangci-lint-action@v2
-          
-    - name: show lint errors
-      run: golangci-lint run
-        if: ${{ failure() }}
+      with:
+        args: "--out-${NO_FUTURE}format colored-line-number"
 
     - name: security
       uses: securego/gosec@master
