@@ -63,7 +63,7 @@ func LightState(w http.ResponseWriter, r *http.Request) {
 		reqState := fmt.Sprintf("%v", req[k])
 		reqState = strings.Replace(reqState, "\n", "", -1)
 		reqState = strings.Replace(reqState, "\r", "", -1)
-		log.Printf("http - light - setting light %d '%s' to %v", id, k, req[k])
+		log.Printf("http - light - setting light %d '%s' to %v", id, k, reqState)
 	}
 	// set light state
 	err = nil
@@ -73,8 +73,8 @@ func LightState(w http.ResponseWriter, r *http.Request) {
 		err = providers.Off(int(id))
 	}
 	if err != nil {
-		reqState := req["on"].(bool)
-		log.Printf("http - light - cannot swith light (%d) '%v': %s", id, reqState, err)
+		reqState := strconv.FormatBool(req["on"].(bool))
+		log.Printf("http - light - cannot swith light (%d) '%s': %s", id, reqState, err)
 		w.WriteHeader(500)
 		return
 	}
