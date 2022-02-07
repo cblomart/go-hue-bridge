@@ -16,8 +16,7 @@ jobs:
     - name: lint
       uses: golanci/golangci-lint-action@v2
 
-    - name:
-      name: security
+    - name: security
       uses: securego/gosec@master
       with:
         args: ./...
