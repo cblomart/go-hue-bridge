@@ -8,6 +8,20 @@ on:
 
 jobs:
 
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: action/checkout@v2
+
+    - name: lint
+      uses: golanci/golangci-lint-action@v2
+
+    - name:
+      name: security
+      uses: securego/gosec@master
+      with:
+        args: ./...
+
   build:
     runs-on: ubuntu-latest
     steps:
