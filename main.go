@@ -106,7 +106,7 @@ func main() {
 	log.Printf("hub - route - /api/{userid}/lights/{id}/state - set light")
 	r.Put("/api/{userid}/lights/{id}/state", api.LightState)
 	log.Printf("hub - http server starting")
-	err = http.ListenAndServe(fmt.Sprintf("%s:80", hueConfig.IPAddress), r)
+	err = http.ListenAndServe(fmt.Sprintf("%s:%d", hueConfig.IPAddress, hueConfig.Port), r)
 	if err != nil {
 		log.Fatalf("hub - http server failed to start: %s", err)
 	}
