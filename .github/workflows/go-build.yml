@@ -1,4 +1,4 @@
-name: Go
+name: Go Build
 
 on:
   push:
@@ -7,21 +7,6 @@ on:
     branches: [ master ]
 
 jobs:
-
-  check:
-    runs-on: ubuntu-latest
-    env:
-      GO111MODULE: on
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: lint
-      uses: golangci/golangci-lint-action@v2
-
-    - name: security
-      uses: securego/gosec@master
-      with:
-        args: --no-fail ./...
 
   build:
     runs-on: ubuntu-latest
