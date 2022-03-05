@@ -55,6 +55,10 @@ func main() {
 		}
 	}
 	config.Config = hueConfig
+	// check listening port
+	if config.Config.Port == 0 {
+		config.Config.Port = 80
+	}
 	// initialize providers
 	for _, provider := range config.Config.Providers {
 		newprovider, err := providers.NewProvider(provider)
@@ -66,15 +70,23 @@ func main() {
 	log.Printf("hub - hub serial: %s", config.Config.Serial)
 	log.Printf("hub - hub UUID: %s", config.Config.UUID)
 	log.Printf("hub - hub ip address: %s", config.Config.IPAddress)
+	log.Printf("hub - hub listening port: %d", config.Config.Port)
+	if config.Config.Proxied {
+		log.Printf("hub - hub listening port is %d. But port 80 is advertised!", config.Config.Port)
+	}
 	log.Printf("hub - initial inventory: %d lights", len(items.Lights))
-
+	// advertised port
+	advertisedPort := config.Config.Port
+	if config.Config.Proxied {
+		advertisedPort = 80
+	}
 	// start ssdp advertisement
 	_, err := ssdp.Advertise(
 		"upnp:rootdevice", // send as "ST"
-		"uuid:2fa00080-d000-11e1-9b23-001f80007bbe::upnp:rootdevice",       // send as "USN"
-		fmt.Sprintf("http://%s:80/discovery.xml", config.Config.IPAddress), // send as "LOCATION"
-		"FreeRTOS/6.0.5, UPnP/1.0, IpBridge/0.1",                           // send as "SERVER"
-		100,                                                                // send as "maxAge" in "CACHE-CONTROL
+		"uuid:2fa00080-d000-11e1-9b23-001f80007bbe::upnp:rootdevice",                       // send as "USN"
+		fmt.Sprintf("http://%s:%d/discovery.xml", config.Config.IPAddress, advertisedPort), // send as "LOCATION"
+		"FreeRTOS/6.0.5, UPnP/1.0, IpBridge/0.1",                                           // send as "SERVER"
+		100,                                                                                // send as "maxAge" in "CACHE-CONTROL
 	)
 	if err != nil {
 		log.Fatalf("hub - ssdp advertiser: %s", err)

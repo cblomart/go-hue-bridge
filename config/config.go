@@ -19,7 +19,7 @@ type ProviderConfig struct {
 	Type       string
 	Name       string
 	IPAddress  string
-	Port       string
+	Port       int
 	Username   string
 	Password   string
 	SSL        bool
@@ -30,6 +30,8 @@ type HueConfig struct {
 	Serial    string
 	UUID      string
 	IPAddress string
+	Port      int
+	Proxied   bool
 	Providers []ProviderConfig
 }
 

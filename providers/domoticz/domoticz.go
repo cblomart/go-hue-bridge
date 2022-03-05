@@ -37,7 +37,7 @@ type DomoticzStatus struct {
 type Domoticz struct {
 	Name       string
 	IPAddress  string
-	Port       string
+	Port       int
 	Username   string
 	Password   string
 	SSL        bool
@@ -54,7 +54,7 @@ func NewDomoticz(conf config.ProviderConfig) Domoticz {
 	if len(conf.Username) > 0 && len(conf.Password) > 0 {
 		auth = fmt.Sprintf("%s:*@", conf.Username)
 	}
-	log.Printf("domoticz - %s - new provider: %s://%s%s:%s", conf.Name, proto, auth, conf.IPAddress, conf.Port)
+	log.Printf("domoticz - %s - new provider: %s://%s%s:%d", conf.Name, proto, auth, conf.IPAddress, conf.Port)
 	return Domoticz{
 		Name:       conf.Name,
 		IPAddress:  conf.IPAddress,
@@ -72,7 +72,7 @@ func (d Domoticz) getURL(path string) string {
 	if d.SSL {
 		proto = "https"
 	}
-	return fmt.Sprintf("%s://%s:%s%s", proto, d.IPAddress, d.Port, path)
+	return fmt.Sprintf("%s://%s:%d%s", proto, d.IPAddress, d.Port, path)
 }
 
 func (d Domoticz) Set(id, state string) error {
