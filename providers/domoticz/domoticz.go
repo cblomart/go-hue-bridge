@@ -13,9 +13,9 @@ import (
 )
 
 const (
-	listlightsPath = "/json.htm?type=devices&filter=light&used=true&order=[Order]"
+	listlightsPath = "/json.htm?type=command&param=getdevices&filter=light&used=true&order=[Order]"
 	setlightPath   = "/json.htm?type=command&param=switchlight&idx={id}&switchcmd={cmd}"
-	getlightPath   = "/json.htm?type=devices&rid={id}"
+	getlightPath   = "/json.htm?type=command&param=getdevices&rid={id}"
 )
 
 type DomoticzLight struct {
