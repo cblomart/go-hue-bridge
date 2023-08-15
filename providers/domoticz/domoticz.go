@@ -3,7 +3,7 @@ package domoticz
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -92,7 +92,7 @@ func (d Domoticz) Set(id, state string) error {
 	}
 	// read response
 	defer resp.Body.Close()
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyBytes, _ := io.ReadAll(resp.Body)
 	// convert to object
 	var domoticzStatus DomoticzStatus
 	err = json.Unmarshal(bodyBytes, &domoticzStatus)
@@ -131,7 +131,7 @@ func (d Domoticz) GetLights() error {
 	}
 	// read response
 	defer resp.Body.Close()
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyBytes, _ := io.ReadAll(resp.Body)
 	// convert to object
 	var domoticzLights DomoticzLights
 	err = json.Unmarshal(bodyBytes, &domoticzLights)
@@ -167,7 +167,7 @@ func (d Domoticz) GetLight(id string) error {
 	}
 	// read response
 	defer resp.Body.Close()
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyBytes, _ := io.ReadAll(resp.Body)
 	// convert to object
 	var domoticzLights DomoticzLights
 	err = json.Unmarshal(bodyBytes, &domoticzLights)
